@@ -35,7 +35,7 @@ elif pane_alive "$claude"; then
   tmux join-pane -h -l "$width" -s "$pane" -t "$claude" 2>/dev/null || true
   tmux select-pane -t "$claude" 2>/dev/null || true
 else
-  # Claude pane is gone — just jump to the parked arcade window.
+  # Claude pane is gone - just jump to the parked arcade window.
   tmux select-window -t "$pane" 2>/dev/null || true
 fi
 

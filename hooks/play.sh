@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# UserPromptSubmit hook: Claude is about to work — let the arcade run.
+# UserPromptSubmit hook: Claude is about to work - let the arcade run.
 # Must stay silent on stdout (UserPromptSubmit stdout is injected into the prompt).
 set -u
 

@@ -160,7 +160,7 @@ function draw(game: ChessGame, cursorRow: number, cursorCol: number, sel: Select
 
   let status: string;
   if (game.isCheckmate()) {
-    status = game.turn() === "w" ? color(`${BOLD}CHECKMATE — engine wins`, FG.red) : color(`${BOLD}CHECKMATE — you win!`, FG.green);
+    status = game.turn() === "w" ? color(`${BOLD}CHECKMATE - engine wins`, FG.red) : color(`${BOLD}CHECKMATE - you win!`, FG.green);
   } else if (game.isStalemate()) {
     status = color(`${BOLD}STALEMATE`, FG.yellow);
   } else if (game.isDraw()) {

@@ -16,14 +16,14 @@ fi
 # Remember the plugin root so toggle.sh (bound to a key, no env) can find lib/recreate.
 echo "${CLAUDE_PLUGIN_ROOT}" >"$ARC_DIR/root"
 
-# Only works inside tmux — that is what gives us the split UI.
+# Only works inside tmux - that is what gives us the split UI.
 if [ -z "${TMUX:-}" ]; then
   exit 0
 fi
 
 BUN="$(command -v bun 2>/dev/null || echo "$HOME/.bun/bin/bun")"
 
-# Bind Alt-j to the toggle for this tmux server (idempotent — just re-sets it).
+# Bind Alt-j to the toggle for this tmux server (idempotent - just re-sets it).
 # tmux expands #{session_id} at key-press time, so the toggle always acts on the
 # session the key was pressed in (no display-message guessing).
 tmux bind-key -n M-j run-shell "ARC_SID='#{session_id}' bash '${CLAUDE_PLUGIN_ROOT}/hooks/toggle.sh'" 2>/dev/null || true

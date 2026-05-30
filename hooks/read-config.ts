@@ -12,5 +12,5 @@ try {
   const value = cfg[key];
   if (value !== undefined && value !== null) process.stdout.write(String(value));
 } catch {
-  /* no config yet — print nothing, caller uses its fallback */
+  /* no config yet - print nothing, caller uses its fallback */
 }

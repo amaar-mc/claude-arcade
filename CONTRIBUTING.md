@@ -19,24 +19,24 @@ bun arcade/arcade.ts   # play it locally (any terminal, no tmux needed)
 3. Export a `module: GameModule` (see `arcade/types.ts`). Its `create()` returns
    a `RunningGame` shell that holds the live state and delegates to your pure
    functions.
-4. Your `draw()` returns lines whose **visible width fits the pane** — render
+4. Your `draw()` returns lines whose **visible width fits the pane** - render
    with the helpers in `arcade/render.ts` (`color`, `center`, …). Don't print
    ANSI by hand; the frame compositor handles positioning and clearing.
 5. Register it in the `GAMES` array in `arcade/arcade.ts`.
 6. Add `test/<yourgame>.test.ts` covering the win/lose/draw logic and any engine.
    Keep your board within the default pane width (52 cols) so it never bleeds
-   into Claude's pane — `bun test` plus a quick `bun arcade/arcade.ts` to eyeball
+   into Claude's pane - `bun test` plus a quick `bun arcade/arcade.ts` to eyeball
    it is the bar.
 
 ## Conventions
 
-- TypeScript, strict, run by Bun directly — **no build step**.
+- TypeScript, strict, run by Bun directly - **no build step**.
 - Functional over OOP; pure functions for logic, thin shells for state.
 - Conventional Commits (`feat:`, `fix:`, `docs:` …).
 - `bun test` must pass. Keep games dependency-free where possible (chess is the
-  one exception — it reuses the vendored `chess.js` rules engine).
+  one exception - it reuses the vendored `chess.js` rules engine).
 
 ## Ideas wanted
 
 Minesweeper, Tetris, Wordle, Solitaire, 2048-style variants, a harder chess
-eval. Open a PR — small and focused beats big and sprawling.
+eval. Open a PR - small and focused beats big and sprawling.

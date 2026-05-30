@@ -2,114 +2,112 @@
 
 # 🕹 Claude Arcade
 
-**Play games in a side-pane while Claude Code works.**
+### Claude Code is working. So are your thumbs.
 
-Snake · 2048 · Tic-Tac-Toe · Connect Four · Chess — running in your terminal,
-right next to Claude. The games play while Claude is generating and **pause the
-moment it's done**, so you stay at your desk instead of doom-scrolling.
+Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a little pane right next to Claude Code. The game runs while Claude thinks and freezes the second it's done, so the wait actually goes somewhere.
+
+[![MIT License](https://img.shields.io/badge/license-MIT-22c55e.svg)](LICENSE)
+[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-8b5cf6.svg)](https://docs.claude.com/en/docs/claude-code)
+[![Runs on Bun](https://img.shields.io/badge/runs%20on-Bun-f9f1e1.svg)](https://bun.sh)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-22c55e.svg)](CONTRIBUTING.md)
+[![GitHub stars](https://img.shields.io/github/stars/amaar-mc/claude-arcade?style=social)](https://github.com/amaar-mc/claude-arcade)
 
 ```
-┌─ Claude Code ────────────────┐ ┌─ Claude Arcade ───────────┐
-│ > build the dashboard         │ │   ▞▚ CLAUDE ARCADE ▚▞      │
-│ ● Working… (esc to cancel)    │ │   ┌──────────────────┐    │
-│   - writing components/…      │ │   │········██████····│    │
-│   - wiring the API route      │ │   │····◆◆············│    │
-│                               │ │   └──────────────────┘    │
-│        (your prompt)          │ │   score 7   ● Claude…     │
-└───────────────────────────────┘ └───────────────────────────┘
+┌─ Claude Code ─────────────────┐ ┌─ Claude Arcade ───────────┐
+│ > build the dashboard          │ │   ▞▚ CLAUDE ARCADE ▚▞      │
+│ ● Working... (esc to cancel)   │ │   ┌──────────────────┐    │
+│   - writing components/...      │ │   │·······███████····│    │
+│   - wiring the API route        │ │   │····◆◆············│    │
+│                                │ │   └──────────────────┘    │
+│        (your prompt)           │ │   score 7    ● Claude...  │
+└────────────────────────────────┘ └───────────────────────────┘
 ```
 
-<sub>↑ a recorded GIF goes here before launch — see <a href="#make-the-gif">Make the GIF</a>.</sub>
+<sub>A real GIF goes here before launch. See <a href="#make-a-gif">Make a GIF</a>.</sub>
 
 </div>
 
-## Why
+## The idea
 
-Claude Code is fast, but you still wait. Claude Arcade fills the wait with a
-real game on the right while Claude's output streams on the left — same window,
-zero context-switch. Stop a prompt, you stop the game. Send another, you're
-back in. It's a tmux split driven entirely by Claude Code hooks. No patched
-internals, no private APIs.
+You fire off a prompt. Claude starts cranking. Instead of watching a spinner or flipping to Twitter, you get a real game on the right side of the same terminal. Output streams on the left, you play on the right. Claude finishes, the game pauses, you read the result and send the next prompt. Back in.
 
-## Games
+No forks, no patched internals. It's a tmux split wired up with Claude Code hooks.
 
-| Game | Opponent | Controls |
+## The games
+
+| Game | You vs | Keys |
 | --- | --- | --- |
-| 🐍 **Snake** | yourself | arrows / `WASD` |
-| 🔢 **2048** | yourself | arrows / `WASD` |
-| ⭕ **Tic-Tac-Toe** | perfect minimax engine | arrows + `enter`, or `1`–`9` |
-| 🔴 **Connect Four** | alpha-beta engine | `←`/`→` + `enter`, or `1`–`7` |
-| ♟ **Chess** | engine on [chess.js](https://github.com/jhlywa/chess.js) rules | arrows + `enter` |
+| 🐍 Snake | gravity and your own tail | arrows or `WASD` |
+| 🔢 2048 | the number gods | arrows or `WASD` |
+| ⭕ Tic-Tac-Toe | a minimax engine that never loses | arrows + `enter`, or `1`-`9` |
+| 🔴 Connect Four | an alpha-beta engine | `←` `→` + `enter`, or `1`-`7` |
+| ♟ Chess | a real engine on [chess.js](https://github.com/jhlywa/chess.js) rules | arrows + `enter` |
 
-`Tab` cycles games · `m` menu · `c` settings · `j` hide the pane (`Alt-j` brings it back).
+`Tab` switches games. `c` opens settings. `j` hides the pane, `Alt-j` brings it back.
 
-## Setup
+## Quick start
 
-**Requires:** [tmux](https://github.com/tmux/tmux) and [Bun](https://bun.sh). Both common, both one `brew install`.
+You need [tmux](https://github.com/tmux/tmux) and [Bun](https://bun.sh). Both are a one-line `brew install`.
 
-```sh
-# In Claude Code:
+Install the plugin from inside Claude Code:
+
+```
 /plugin marketplace add amaar-mc/claude-arcade
 /plugin install claude-arcade
 ```
 
-Then run Claude Code **inside tmux** — start a tmux session and run `claude`, or
-use the bundled launcher (adds `Alt-←`/`Alt-→` pane switching):
+Then run Claude Code inside tmux. Use your own session, or let the launcher set one up:
 
 ```sh
-claude-arcade           # = claude, wrapped in a ready-to-play tmux session
+claude-arcade
 ```
 
-The arcade pane opens automatically. Submit a prompt → it plays. Claude finishes
-→ it pauses. That's it.
+The arcade pops up on the right. Send a prompt and play. When Claude is done, it pauses. That's the whole thing.
 
 ## Settings
 
-Press **`c`** in the arcade for a live settings screen (default game, snake
-speed, wall-wrap, engine difficulty, auto-focus). Or run **`/arcade`** in Claude
-Code to edit them from chat. Everything persists in `~/.claude-arcade/config.json`.
+Hit `c` in the arcade for a live settings screen: default game, snake speed, wall wrap, engine difficulty, auto focus. Prefer chat? Run `/arcade` and tell Claude what to change. It all saves to `~/.claude-arcade/config.json`.
 
 ## How it works
 
 ```
-┌─ Claude Code ───────────────┐ ┌─ Claude Arcade ─────────┐
-│ > build the dashboard        │ │  ♟ Chess   ● Claude…    │
-│ ● Working… (esc to cancel)   │ │  8 r n b q k b n r      │
-│   - writing components/…     │ │  7 p p p p · p p p      │
-│   - wiring the API route     │ │  ...                    │
-└──────────────────────────────┘ └─────────────────────────┘
-   UserPromptSubmit → play          Stop → pause + focus back
+┌─ Claude Code ────────────────┐ ┌─ Claude Arcade ─────────┐
+│ > build the dashboard         │ │  ♟ Chess    ● Claude... │
+│ ● Working... (esc to cancel)  │ │  8 r n b q k b n r      │
+│   - writing components/...     │ │  7 p p p p · p p p      │
+│   - wiring the API route       │ │  ...                    │
+└───────────────────────────────┘ └─────────────────────────┘
+  UserPromptSubmit starts it        Stop pauses it
 ```
 
-Four Claude Code hooks do all the work: `SessionStart` splits the pane,
-`UserPromptSubmit` plays, `Stop` pauses, `SessionEnd` cleans up. Play/pause is a
-one-word state file the game polls each frame.
+Four hooks, no magic. `SessionStart` opens the pane, `UserPromptSubmit` starts the game, `Stop` pauses it, `SessionEnd` cleans up. Play and pause is one word in a file the game reads every frame.
 
-## Develop
+## Add your own game
+
+A game is one file. Write the rules as plain functions, hand back a `GameModule`, register it, done. Every game follows the same small contract in `arcade/types.ts`, and Tic-Tac-Toe is the easiest one to copy.
+
+Want Minesweeper, Tetris, or Wordle in here? Open a PR. [CONTRIBUTING.md](CONTRIBUTING.md) has the short version.
 
 ```sh
-bun test                 # game-logic + renderer tests
-bun arcade/arcade.ts     # run the arcade standalone in your terminal
+bun test               # game logic and renderer tests
+bun arcade/arcade.ts   # play it standalone, no tmux needed
 ```
 
-Pure game logic lives in `arcade/games/*` (deterministic, unit-tested);
-rendering is centralized in `arcade/render.ts`. Adding a game = one file
-implementing the `GameModule` contract in `arcade/types.ts`. PRs welcome — see
-[CONTRIBUTING.md](CONTRIBUTING.md).
+## Make a GIF
 
-## Make the GIF
-
-A good loop sells it. Record one with [VHS](https://github.com/charmbracelet/vhs):
+A good loop sells the repo. Record one with [VHS](https://github.com/charmbracelet/vhs):
 
 ```sh
 brew install vhs
-vhs assets/demo.tape     # writes assets/demo.gif
+vhs assets/demo.tape   # writes assets/demo.gif
 ```
 
-Edit `assets/demo.tape` to taste, or record live with
-[asciinema](https://asciinema.org) + [agg](https://github.com/asciinema/agg).
+Tweak `assets/demo.tape`, or record a live session with [asciinema](https://asciinema.org).
+
+## Star it
+
+If this made your Claude Code wait less boring, drop a ⭐. It helps other people find it.
 
 ## License
 
-MIT © Amaar Chughtai. Bundles [chess.js](https://github.com/jhlywa/chess.js)
-(BSD-2-Clause, see `vendor/chess.js.LICENSE`).
+MIT, by Amaar Chughtai. Ships with [chess.js](https://github.com/jhlywa/chess.js) (BSD-2-Clause, see `vendor/chess.js.LICENSE`).

@@ -1,4 +1,4 @@
-// Claude Arcade — the launcher loop that runs in the right-hand tmux pane.
+// Claude Arcade - the launcher loop that runs in the right-hand tmux pane.
 // Cycles between games, shows a menu and a live settings screen, and drives
 // each game's input/advance. Real-time games advance only while Claude is
 // working; turn-based games are always playable.
@@ -204,7 +204,7 @@ function main(): void {
       lines.push(center(`${marker} ${color(String(i + 1), FG.cyan)} ${name}`, v.cols));
     });
     lines.push("");
-    lines.push(center(color(GAMES[menuSel].blurb, DIM), v.cols)); // fixed line — no vertical jump
+    lines.push(center(color(GAMES[menuSel].blurb, DIM), v.cols)); // fixed line - no vertical jump
     lines.push("");
     lines.push(center(claudeBadge(), v.cols));
     lines.push("");
@@ -240,7 +240,7 @@ function main(): void {
     for (const gl of drawn.lines) lines.push(center(gl, v.cols));
     lines.push("");
     if (mod.realtime && !isClaudeWorking() && !running.isOver()) {
-      lines.push(center(color("|| PAUSED — prompt Claude to play", FG.yellow), v.cols));
+      lines.push(center(color("|| PAUSED - prompt Claude to play", FG.yellow), v.cols));
     } else {
       lines.push(center(drawn.status, v.cols));
     }

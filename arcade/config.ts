@@ -77,6 +77,6 @@ export function saveConfig(config: ArcadeConfig): void {
     mkdirSync(STATE_DIR, { recursive: true });
     writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2) + "\n", "utf8");
   } catch {
-    /* read-only home or similar — keep playing with in-memory config */
+    /* read-only home or similar - keep playing with in-memory config */
   }
 }

@@ -7,7 +7,7 @@
 set -euo pipefail
 
 if [ -n "${TMUX:-}" ]; then
-  exec claude "$@" # already in tmux — the plugin handles the pane
+  exec claude "$@" # already in tmux - the plugin handles the pane
 fi
 
 if ! command -v tmux >/dev/null 2>&1; then

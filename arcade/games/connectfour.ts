@@ -148,7 +148,7 @@ function draw(board: C4Board, sel: number, result: C4Result): Drawn {
 
   return {
     // Pad every line to the same width so the arcade centers them as one block
-    // (lines differ in length — uneven centering would misalign labels).
+    // (lines differ in length - uneven centering would misalign labels).
     lines: lines.map((l) => padTo(l, width)),
     status,
     help: "←/→ column  ·  enter drop  ·  1-7  ·  r restart",

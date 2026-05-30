@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Stop hook: Claude finished responding — pause real-time games and hand focus
+# Stop hook: Claude finished responding - pause real-time games and hand focus
 # back to the Claude pane so the player can read output and type the next prompt.
 set -u
 
