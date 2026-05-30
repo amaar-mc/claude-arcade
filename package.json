@@ -1,19 +1,22 @@
 {
-  "name": "claude-snake",
-  "version": "0.1.0",
-  "description": "Play snake in a tmux side-pane while Claude Code is generating.",
+  "name": "claude-arcade",
+  "version": "0.2.0",
+  "description": "Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a tmux side-pane while Claude Code works.",
   "type": "module",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "author": "Amaar Chughtai",
+  "homepage": "https://github.com/amaar-mc/claude-arcade",
+  "repository": { "type": "git", "url": "https://github.com/amaar-mc/claude-arcade.git" },
+  "keywords": ["claude-code", "claude-code-plugin", "tmux", "terminal-game", "snake", "chess", "2048", "connect-four", "tic-tac-toe", "arcade", "tui"],
   "bin": {
-    "claude-snake": "bin/claude-snake"
+    "claude-arcade": "bin/claude-arcade"
   },
   "scripts": {
-    "play": "bun game/snake.ts",
+    "play": "bun arcade/arcade.ts",
     "test": "bun test"
   },
   "engines": {
     "bun": ">=1.0.0"
-  },
-  "author": "Amaar Chughtai",
-  "license": "MIT"
+  }
 }

@@ -1,7 +1,8 @@
 {
-  "name": "claude-snake",
-  "version": "0.1.0",
-  "description": "Play a snake game in a tmux side-pane while Claude Code is generating. Plays while Claude thinks, pauses when Claude is done.",
+  "name": "claude-arcade",
+  "version": "0.2.0",
+  "description": "A retro arcade in a tmux side-pane — play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess while Claude Code works. Games run while Claude thinks and pause when it's done.",
   "author": { "name": "Amaar Chughtai" },
-  "keywords": ["game", "snake", "tmux", "fun", "productivity"]
+  "homepage": "https://github.com/amaar-mc/claude-arcade",
+  "keywords": ["game", "games", "arcade", "snake", "chess", "2048", "connect-four", "tic-tac-toe", "tmux", "fun", "productivity", "terminal"]
 }

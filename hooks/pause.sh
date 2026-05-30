@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Stop hook: Claude finished responding — freeze the snake and hand focus back
-# to the Claude pane so the player can read the output and type the next prompt.
+# Stop hook: Claude finished responding — pause real-time games and hand focus
+# back to the Claude pane so the player can read output and type the next prompt.
 set -u
 
-dir="$HOME/.claude-snake"
+dir="$HOME/.claude-arcade"
 mkdir -p "$dir"
 echo paused >"$dir/state"
 

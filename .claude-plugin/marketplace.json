@@ -1,11 +1,11 @@
 {
-  "name": "claude-snake-marketplace",
+  "name": "claude-arcade",
   "owner": { "name": "Amaar Chughtai" },
   "plugins": [
     {
-      "name": "claude-snake",
+      "name": "claude-arcade",
       "source": "./",
-      "description": "Play snake in a tmux side-pane while Claude Code is generating."
+      "description": "Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a tmux side-pane while Claude Code works."
     }
   ]
 }

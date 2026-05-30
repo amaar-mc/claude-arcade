@@ -1,8 +1,8 @@
 {
-  "gridWidth": 20,
-  "gridHeight": 16,
-  "tickMs": 120,
-  "wrap": false,
-  "paneWidth": 46,
-  "autoFocus": true
+  "defaultGame": "snake",
+  "paneWidth": 52,
+  "autoFocus": true,
+  "snake": { "tickMs": 120, "wrap": false },
+  "connectFour": { "aiDepth": 5 },
+  "chess": { "aiDepth": 2 }
 }

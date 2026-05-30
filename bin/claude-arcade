@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Convenience launcher: start Claude Code inside tmux with arcade-friendly
+# pane switching. The claude-arcade plugin creates the game pane itself on
+# SessionStart, so this only sets up tmux + handy keybindings.
+#
+# Usage: claude-arcade [args passed through to `claude`]
+set -euo pipefail
+
+if [ -n "${TMUX:-}" ]; then
+  exec claude "$@" # already in tmux — the plugin handles the pane
+fi
+
+if ! command -v tmux >/dev/null 2>&1; then
+  echo "claude-arcade needs tmux (brew install tmux)." >&2
+  exit 1
+fi
+
+session="claude-arcade-$$"
+
+# Alt-Left / Alt-Right switch panes without the tmux prefix; Alt-j toggles the
+# arcade pane (also auto-bound by the plugin on SessionStart).
+tmux bind-key -n M-Left  select-pane -L >/dev/null 2>&1 || true
+tmux bind-key -n M-Right select-pane -R >/dev/null 2>&1 || true
+
+tmux new-session -d -s "$session" "claude $*"
+exec tmux attach-session -t "$session"

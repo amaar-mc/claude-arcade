@@ -1,114 +1,105 @@
-# 🐍 Claude Snake
+<div align="center">
 
-A Claude Code plugin that drops a playable **snake game** into a side-pane of
-your terminal. The snake runs while Claude Code is generating, and **pauses the
-moment Claude finishes** — the only way to resume is to send another prompt.
-Game on the right, Claude's output on the left, same window.
+# 🕹 Claude Arcade
 
+**Play games in a side-pane while Claude Code works.**
+
+Snake · 2048 · Tic-Tac-Toe · Connect Four · Chess — running in your terminal,
+right next to Claude. The games play while Claude is generating and **pause the
+moment it's done**, so you stay at your desk instead of doom-scrolling.
+
+<!-- Replace with your recording — see "Make the GIF" below -->
+![Claude Arcade demo](assets/demo.gif)
+
+</div>
+
+## Why
+
+Claude Code is fast, but you still wait. Claude Arcade fills the wait with a
+real game on the right while Claude's output streams on the left — same window,
+zero context-switch. Stop a prompt, you stop the game. Send another, you're
+back in. It's a tmux split driven entirely by Claude Code hooks. No patched
+internals, no private APIs.
+
+## Games
+
+| Game | Opponent | Controls |
+| --- | --- | --- |
+| 🐍 **Snake** | yourself | arrows / `WASD` |
+| 🔢 **2048** | yourself | arrows / `WASD` |
+| ⭕ **Tic-Tac-Toe** | perfect minimax engine | arrows + `enter`, or `1`–`9` |
+| 🔴 **Connect Four** | alpha-beta engine | `←`/`→` + `enter`, or `1`–`7` |
+| ♟ **Chess** | engine on [chess.js](https://github.com/jhlywa/chess.js) rules | arrows + `enter` |
+
+`Tab` cycles games · `m` menu · `c` settings · `j` hide the pane (`Alt-j` brings it back).
+
+## Setup
+
+**Requires:** [tmux](https://github.com/tmux/tmux) and [Bun](https://bun.sh). Both common, both one `brew install`.
+
+```sh
+# In Claude Code:
+/plugin marketplace add amaar-mc/claude-arcade
+/plugin install claude-arcade
 ```
-┌───────────────────────────┐ ┌─────────────────────────┐
-│ > refactor the auth module │ │   🐍 CLAUDE SNAKE        │
-│                            │ │   ┌────────────────────┐ │
-│ ● Working… (esc to cancel) │ │   │··············██████│ │
-│   - reading auth.ts        │ │   │··········◆◆········│ │
-│   - writing middleware     │ │   │····················│ │
-│                            │ │   └────────────────────┘ │
-│         (Claude pane)      │ │   score 7  ▶ playing     │
-└───────────────────────────┘ └─────────────────────────┘
+
+Then run Claude Code **inside tmux** — start a tmux session and run `claude`, or
+use the bundled launcher (adds `Alt-←`/`Alt-→` pane switching):
+
+```sh
+claude-arcade           # = claude, wrapped in a ready-to-play tmux session
 ```
+
+The arcade pane opens automatically. Submit a prompt → it plays. Claude finishes
+→ it pauses. That's it.
+
+## Settings
+
+Press **`c`** in the arcade for a live settings screen (default game, snake
+speed, wall-wrap, engine difficulty, auto-focus). Or run **`/arcade`** in Claude
+Code to edit them from chat. Everything persists in `~/.claude-arcade/config.json`.
 
 ## How it works
 
-Claude Code owns the whole terminal UI, so a plugin can't paint its own panel
-*inside* it. Instead this plugin uses **tmux**: Claude Code runs in the left
-pane, the game in the right pane. Three Claude Code hooks wire them together:
-
-| Hook               | What it does                                              |
-| ------------------ | --------------------------------------------------------- |
-| `SessionStart`     | Splits a right-hand pane and launches the game (paused).  |
-| `UserPromptSubmit` | Writes `playing` → snake moves; focus jumps to the game.  |
-| `Stop`             | Writes `paused` → snake freezes; focus returns to Claude. |
-| `SessionEnd`       | Kills the game pane.                                       |
-
-Play/pause is a one-word state file at `~/.claude-snake/state`; the game polls
-it each frame. No private Claude Code APIs, nothing patched.
-
-## Requirements
-
-- [tmux](https://github.com/tmux/tmux) (`brew install tmux`)
-- [Bun](https://bun.sh) (the game is TypeScript, run directly — no build step)
-
-## Install
-
-1. Add this directory as a plugin marketplace and install it:
-
-   ```
-   /plugin marketplace add /Users/amaarchughtai/Developer/projects/active/claude-gaming
-   /plugin install claude-snake
-   ```
-
-2. Run Claude Code **inside tmux**. Either start your own tmux session and run
-   `claude`, or use the bundled launcher (also adds `Alt-←`/`Alt-→` to switch
-   panes without the tmux prefix):
-
-   ```
-   ./bin/claude-snake
-   ```
-
-The game pane appears automatically. Submit a prompt → play. Claude finishes →
-it pauses.
-
-> Not using the plugin system? Point the same hooks at these scripts from your
-> `~/.claude/settings.json` `hooks` block — the commands are in `hooks/`.
-
-## Controls
-
-| Key                | Action          |
-| ------------------ | --------------- |
-| Arrow keys / `WASD`| Steer           |
-| `r`                | Restart         |
-| `q` / `Ctrl-C`     | Quit the game   |
-| `Alt-←` / `Alt-→`  | Switch panes\*  |
-
-\* When using `bin/claude-snake`. Otherwise use tmux's default `Ctrl-b ←/→`.
-
-## Configure
-
-Settings live at `~/.claude-snake/config.json` (seeded from
-`config.default.json` on first run):
-
-```json
-{
-  "gridWidth": 20,
-  "gridHeight": 16,
-  "tickMs": 120,
-  "wrap": false,
-  "paneWidth": 46,
-  "autoFocus": true
-}
+```
+┌─ Claude Code ───────────────┐ ┌─ Claude Arcade ─────────┐
+│ > build the dashboard        │ │  ♟ Chess   ● Claude…    │
+│ ● Working… (esc to cancel)   │ │  8 r n b q k b n r      │
+│   - writing components/…     │ │  7 p p p p · p p p      │
+│   - wiring the API route     │ │  ...                    │
+└──────────────────────────────┘ └─────────────────────────┘
+   UserPromptSubmit → play          Stop → pause + focus back
 ```
 
-- `tickMs` — lower = faster snake.
-- `wrap` — pass through walls vs. die on them.
-- `autoFocus` — auto pane-switching on prompt submit/finish. Set `false` if you
-  prefer to switch manually (handy when Claude often asks for tool permissions,
-  which need the Claude pane focused).
+Four Claude Code hooks do all the work: `SessionStart` splits the pane,
+`UserPromptSubmit` plays, `Stop` pauses, `SessionEnd` cleans up. Play/pause is a
+one-word state file the game polls each frame.
 
-Edit the file directly, or run **`/snake`** inside Claude Code to view and
-change settings conversationally. Grid/speed changes apply on the next game
-(press `r` to restart); `paneWidth` applies next session.
+## Develop
 
-## Development
-
-```bash
-bun test            # pure game-logic tests
-bun game/snake.ts   # run the game standalone in your terminal
+```sh
+bun test                 # game-logic + renderer tests
+bun arcade/arcade.ts     # run the arcade standalone in your terminal
 ```
 
-Game logic is split into pure, deterministic functions in `game/engine.ts`
-(randomness injected, so it's fully unit-testable) with all terminal IO in
-`game/snake.ts`.
+Pure game logic lives in `arcade/games/*` (deterministic, unit-tested);
+rendering is centralized in `arcade/render.ts`. Adding a game = one file
+implementing the `GameModule` contract in `arcade/types.ts`. PRs welcome — see
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Make the GIF
+
+A good loop sells it. Record one with [VHS](https://github.com/charmbracelet/vhs):
+
+```sh
+brew install vhs
+vhs assets/demo.tape     # writes assets/demo.gif
+```
+
+Edit `assets/demo.tape` to taste, or record live with
+[asciinema](https://asciinema.org) + [agg](https://github.com/asciinema/agg).
 
 ## License
 
-MIT
+MIT © Amaar Chughtai. Bundles [chess.js](https://github.com/jhlywa/chess.js)
+(BSD-2-Clause, see `vendor/chess.js.LICENSE`).
