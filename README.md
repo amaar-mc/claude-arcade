@@ -12,18 +12,7 @@ Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a pane right next to C
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-22c55e.svg)](CONTRIBUTING.md)
 [![GitHub stars](https://img.shields.io/github/stars/amaar-mc/claude-arcade?style=social)](https://github.com/amaar-mc/claude-arcade)
 
-```
-┌ Claude Code ────────────────────┐ ┌ Claude Arcade ────────────┐
-│ > build the dashboard           │ │  SNAKE            score 4 │
-│ ● Working... (esc to cancel)    │ │  ┌──────────────────┐     │
-│   reading components/           │ │  │······█████·······│     │
-│   wiring the API route          │ │  │··◆···············│     │
-│                                 │ │  └──────────────────┘     │
-│        (your prompt)            │ │  playing      ● Claude    │
-└─────────────────────────────────┘ └───────────────────────────┘
-```
-
-<sub>Swap this for a recorded GIF before launch.</sub>
+![Claude Arcade: play 2048 while Claude Code builds your landing page](assets/demo.gif)
 
 </div>
 
