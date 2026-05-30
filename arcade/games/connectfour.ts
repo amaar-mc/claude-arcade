@@ -151,7 +151,7 @@ function draw(board: C4Board, sel: number, result: C4Result): Drawn {
     // (lines differ in length — uneven centering would misalign labels).
     lines: lines.map((l) => padTo(l, width)),
     status,
-    help: "←/→ pick column  ·  enter drop  ·  1-7  ·  r restart",
+    help: "←/→ column  ·  enter drop  ·  1-7  ·  r restart",
   };
 }
 

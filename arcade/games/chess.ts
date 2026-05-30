@@ -190,6 +190,9 @@ export const module: GameModule = {
     function legalFrom(square: string): Map<string, string | undefined> {
       const targets = new Map<string, string | undefined>();
       for (const m of game.moves({ square, verbose: true }) as VerboseMove[]) {
+        // Auto-queen: if a square has multiple promotion moves, keep the queen
+        // one rather than relying on chess.js enumeration order.
+        if (m.promotion !== undefined && m.promotion !== "q" && targets.has(m.to)) continue;
         targets.set(m.to, m.promotion);
       }
       return targets;

@@ -24,7 +24,9 @@ fi
 BUN="$(command -v bun 2>/dev/null || echo "$HOME/.bun/bin/bun")"
 
 # Bind Alt-j to the toggle for this tmux server (idempotent — just re-sets it).
-tmux bind-key -n M-j run-shell "bash '${CLAUDE_PLUGIN_ROOT}/hooks/toggle.sh'" 2>/dev/null || true
+# tmux expands #{session_id} at key-press time, so the toggle always acts on the
+# session the key was pressed in (no display-message guessing).
+tmux bind-key -n M-j run-shell "ARC_SID='#{session_id}' bash '${CLAUDE_PLUGIN_ROOT}/hooks/toggle.sh'" 2>/dev/null || true
 
 # Already have a live arcade pane for this session? Do nothing.
 if [ -f "$ARC_RDIR/pane" ] && pane_alive "$(cat "$ARC_RDIR/pane")"; then
@@ -41,7 +43,7 @@ case "$width" in '' | *[!0-9]*) width=52 ;; esac
 echo "$width" >"$ARC_RDIR/panewidth"
 
 game_pane="$(tmux split-window -h -d -l "$width" -P -F '#{pane_id}' \
-  "exec env CLAUDE_ARCADE_STATE='$ARC_RDIR/state' '$BUN' '${CLAUDE_PLUGIN_ROOT}/arcade/arcade.ts' || read -n1 -s" 2>/dev/null)"
+  "exec env CLAUDE_ARCADE_STATE='$ARC_RDIR/state' '$BUN' '${CLAUDE_PLUGIN_ROOT}/arcade/arcade.ts' || read -r _" 2>/dev/null)"
 
 [ -n "$game_pane" ] && echo "$game_pane" >"$ARC_RDIR/pane"
 

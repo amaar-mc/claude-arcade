@@ -8,7 +8,7 @@ the settings screen. This command edits the same config from chat.
 Config lives at `~/.claude-arcade/config.json`. Fields:
 
 - `defaultGame` — which game opens first: `snake`, `tictactoe`, `connectfour`, `twenty48`, or `chess`.
-- `paneWidth` — width in columns of the arcade tmux pane (applies to new sessions).
+- `paneWidth` — width in columns of the arcade tmux pane, 30–200 (applies to new sessions).
 - `autoFocus` — `true` jumps focus to the arcade on prompt submit and back to Claude when it finishes; `false` leaves you to switch panes manually.
 - `snake.tickMs` — milliseconds per move; lower is faster (40–400).
 - `snake.wrap` — `true` lets the snake pass through walls.
