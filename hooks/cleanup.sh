@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
-# SessionEnd hook: tear down the arcade pane when Claude Code exits. Also kills a
-# parked (hidden) arcade pane if it was broken into its own window.
+# SessionEnd hook: tear down this session's arcade pane (visible or parked) and
+# remove its runtime dir, so a later Alt-j won't resurrect a stale pane.
 set -u
 
-dir="$HOME/.claude-arcade"
+. "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"
+arcade_dirs
 
-if [ -n "${TMUX:-}" ] && [ -f "$dir/pane" ]; then
-  tmux kill-pane -t "$(cat "$dir/pane")" 2>/dev/null || true
+if [ -n "${TMUX:-}" ] && [ -f "$ARC_RDIR/pane" ]; then
+  tmux kill-pane -t "$(cat "$ARC_RDIR/pane")" 2>/dev/null || true
 fi
 
-rm -f "$dir/pane" "$dir/claude_pane" 2>/dev/null || true
+rm -rf "$ARC_RDIR" 2>/dev/null || true
 
 exit 0

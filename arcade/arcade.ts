@@ -12,7 +12,6 @@ import {
   DIM,
   FG,
   HIDE_CURSOR,
-  INVERSE,
   RESET,
   SHOW_CURSOR,
   CLEAR_SCREEN,
@@ -143,8 +142,7 @@ function main(): void {
     if (key === "\t") return cycleGame(1);
     if (key === "c" || key === "C") {
       if (screen === "settings") {
-        config = loadConfig();
-        screen = prevScreen;
+        screen = prevScreen; // keep in-memory config; it was already saved on each change
       } else openSettings();
       return;
     }
@@ -196,7 +194,7 @@ function main(): void {
 
   function buildMenu(v: View): string[] {
     const lines: string[] = [];
-    lines.push(center(color(`${BOLD}🕹  CLAUDE ARCADE`, FG.magenta), v.cols));
+    lines.push(center(color(`${BOLD}▞▚ CLAUDE ARCADE ▚▞`, FG.magenta), v.cols));
     lines.push(center(color("play while Claude works", DIM), v.cols));
     lines.push("");
     GAMES.forEach((g, i) => {
@@ -216,7 +214,7 @@ function main(): void {
 
   function buildSettings(v: View): string[] {
     const lines: string[] = [];
-    lines.push(center(color(`${BOLD}⚙  SETTINGS`, FG.cyan), v.cols));
+    lines.push(center(color(`${BOLD}▞▚ SETTINGS ▚▞`, FG.cyan), v.cols));
     lines.push("");
     fields.forEach((f, i) => {
       const selected = i === settingsSel;
@@ -242,7 +240,7 @@ function main(): void {
     for (const gl of drawn.lines) lines.push(center(gl, v.cols));
     lines.push("");
     if (mod.realtime && !isClaudeWorking() && !running.isOver()) {
-      lines.push(center(color("⏸ paused — prompt Claude to play", FG.yellow), v.cols));
+      lines.push(center(color("|| PAUSED — prompt Claude to play", FG.yellow), v.cols));
     } else {
       lines.push(center(drawn.status, v.cols));
     }

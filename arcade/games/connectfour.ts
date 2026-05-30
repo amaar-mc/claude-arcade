@@ -2,7 +2,7 @@
 // is Yellow. Pure logic (drop/winner/evaluate/bestColumn) is exported for tests.
 
 import type { Drawn, GameConfig, GameModule, RNG, RunningGame, View } from "../types.ts";
-import { BOLD, FG, RESET, center, color } from "../render.ts";
+import { BOLD, FG, RESET, color, padTo } from "../render.ts";
 
 export type Disc = "R" | "Y" | null;
 export type C4Board = readonly (readonly Disc[])[]; // [row][col], row 0 = top
@@ -127,14 +127,15 @@ function disc(d: Disc): string {
 
 function draw(board: C4Board, sel: number, result: C4Result): Drawn {
   const width = COLS * 2 + 2;
-  const indicator: string[] = [];
-  for (let c = 0; c < COLS; c++) indicator.push(c === sel && result === null ? color("▼", FG.red) : " ", " ");
-  const lines: string[] = [indicator.join("").trimEnd().padEnd(width)];
+  // Leading space accounts for the left border column so the ▼ sits over its disc.
+  let ind = " ";
+  for (let c = 0; c < COLS; c++) ind += (c === sel && result === null ? color("▼", FG.red) : " ") + " ";
+  const lines: string[] = [ind];
   lines.push(color(`╭${"─".repeat(COLS * 2)}╮`, FG.blue));
   for (let r = 0; r < ROWS; r++) {
     let row = color("│", FG.blue);
     for (let c = 0; c < COLS; c++) row += disc(board[r][c]) + " ";
-    lines.push(row.trimEnd() + color("│", FG.blue));
+    lines.push(row + color("│", FG.blue));
   }
   lines.push(color(`╰${"─".repeat(COLS * 2)}╯`, FG.blue));
   lines.push(color(" 1 2 3 4 5 6 7", FG.gray));
@@ -146,7 +147,9 @@ function draw(board: C4Board, sel: number, result: C4Result): Drawn {
   else status = `${color("your move", FG.red)}${RESET}`;
 
   return {
-    lines: lines.map((l) => center(l, width)),
+    // Pad every line to the same width so the arcade centers them as one block
+    // (lines differ in length — uneven centering would misalign labels).
+    lines: lines.map((l) => padTo(l, width)),
     status,
     help: "←/→ pick column  ·  enter drop  ·  1-7  ·  r restart",
   };

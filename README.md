@@ -8,8 +8,18 @@ Snake · 2048 · Tic-Tac-Toe · Connect Four · Chess — running in your termin
 right next to Claude. The games play while Claude is generating and **pause the
 moment it's done**, so you stay at your desk instead of doom-scrolling.
 
-<!-- Replace with your recording — see "Make the GIF" below -->
-![Claude Arcade demo](assets/demo.gif)
+```
+┌─ Claude Code ────────────────┐ ┌─ Claude Arcade ───────────┐
+│ > build the dashboard         │ │   ▞▚ CLAUDE ARCADE ▚▞      │
+│ ● Working… (esc to cancel)    │ │   ┌──────────────────┐    │
+│   - writing components/…      │ │   │········██████····│    │
+│   - wiring the API route      │ │   │····◆◆············│    │
+│                               │ │   └──────────────────┘    │
+│        (your prompt)          │ │   score 7   ● Claude…     │
+└───────────────────────────────┘ └───────────────────────────┘
+```
+
+<sub>↑ a recorded GIF goes here before launch — see <a href="#make-the-gif">Make the GIF</a>.</sub>
 
 </div>
 

@@ -19,6 +19,6 @@ Do this:
 
 1. Read `~/.claude-arcade/config.json` and show the current values.
 2. If the user asked for a change in `$ARGUMENTS`, edit the JSON, validating against the constraints above.
-3. Note that game/speed/difficulty changes take effect on the next game (switch games with Tab or press `r`), and `paneWidth` applies next session.
+3. Note that game/speed/difficulty changes take effect on the next game (switch games with Tab, or press `r` to restart the current one), and `paneWidth` applies next session.
 
 User request: $ARGUMENTS

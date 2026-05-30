@@ -7,7 +7,7 @@
 
 import { Chess } from "../../vendor/chess.js";
 import type { Drawn, GameConfig, GameModule, RNG, RunningGame, View } from "../types.ts";
-import { BG, BOLD, DIM, FG, INVERSE, RESET, center, color } from "../render.ts";
+import { BG, BOLD, DIM, FG, INVERSE, RESET, color, padTo } from "../render.ts";
 
 export type Color = "w" | "b";
 export type Piece = { readonly square: string; readonly type: string; readonly color: Color } | null;
@@ -170,7 +170,7 @@ function draw(game: ChessGame, cursorRow: number, cursorCol: number, sel: Select
     status = side + (game.isCheck() ? color("  ·  check!", FG.red) : "");
   }
 
-  return { lines: lines.map((l) => center(l, width)), status, help: "arrows move  ·  enter select/move  ·  r restart" };
+  return { lines: lines.map((l) => padTo(l, width)), status, help: "arrows move  ·  enter select/move  ·  r restart" };
 }
 
 export const module: GameModule = {

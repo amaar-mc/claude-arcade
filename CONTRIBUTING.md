@@ -23,9 +23,10 @@ bun arcade/arcade.ts   # play it locally (any terminal, no tmux needed)
    with the helpers in `arcade/render.ts` (`color`, `center`, …). Don't print
    ANSI by hand; the frame compositor handles positioning and clearing.
 5. Register it in the `GAMES` array in `arcade/arcade.ts`.
-6. Add `test/<yourgame>.test.ts`. The bar: cover the win/lose/draw logic and any
-   engine. The smoke test (`/tmp` harness in CI) hammers random input and checks
-   widths — keep your board ≤ the default pane width (52 cols).
+6. Add `test/<yourgame>.test.ts` covering the win/lose/draw logic and any engine.
+   Keep your board within the default pane width (52 cols) so it never bleeds
+   into Claude's pane — `bun test` plus a quick `bun arcade/arcade.ts` to eyeball
+   it is the bar.
 
 ## Conventions
 

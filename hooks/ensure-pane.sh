@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
-# SessionStart hook: create the arcade side-pane once per tmux window, and bind
+# SessionStart hook: create the arcade side-pane once per tmux session, and bind
 # Alt-j to toggle (hide/show) it. Must stay silent on stdout (SessionStart
 # stdout is injected into Claude's context).
 set -u
 
-dir="$HOME/.claude-arcade"
-mkdir -p "$dir"
+. "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"
+arcade_dirs
+mkdir -p "$ARC_DIR" "$ARC_RDIR"
 
-# Seed config on first run.
-if [ ! -f "$dir/config.json" ] && [ -f "${CLAUDE_PLUGIN_ROOT}/config.default.json" ]; then
-  cp "${CLAUDE_PLUGIN_ROOT}/config.default.json" "$dir/config.json"
+# Seed config on first run (global, shared across sessions).
+if [ ! -f "$ARC_DIR/config.json" ] && [ -f "${CLAUDE_PLUGIN_ROOT}/config.default.json" ]; then
+  cp "${CLAUDE_PLUGIN_ROOT}/config.default.json" "$ARC_DIR/config.json"
 fi
 
-# Remember the plugin root so toggle.sh (bound to a key, no env) can recreate.
-echo "${CLAUDE_PLUGIN_ROOT}" >"$dir/root"
+# Remember the plugin root so toggle.sh (bound to a key, no env) can find lib/recreate.
+echo "${CLAUDE_PLUGIN_ROOT}" >"$ARC_DIR/root"
 
 # Only works inside tmux — that is what gives us the split UI.
 if [ -z "${TMUX:-}" ]; then
@@ -25,26 +26,23 @@ BUN="$(command -v bun 2>/dev/null || echo "$HOME/.bun/bin/bun")"
 # Bind Alt-j to the toggle for this tmux server (idempotent — just re-sets it).
 tmux bind-key -n M-j run-shell "bash '${CLAUDE_PLUGIN_ROOT}/hooks/toggle.sh'" 2>/dev/null || true
 
-# Already have a live arcade pane? Do nothing.
-if [ -f "$dir/pane" ]; then
-  saved="$(cat "$dir/pane" 2>/dev/null)"
-  if tmux list-panes -a -F '#{pane_id}' 2>/dev/null | grep -qx "$saved"; then
-    exit 0
-  fi
+# Already have a live arcade pane for this session? Do nothing.
+if [ -f "$ARC_RDIR/pane" ] && pane_alive "$(cat "$ARC_RDIR/pane")"; then
+  exit 0
 fi
 
-tmux display-message -p '#{pane_id}' >"$dir/claude_pane" 2>/dev/null
+tmux display-message -p '#{pane_id}' >"$ARC_RDIR/claude_pane" 2>/dev/null
 
 # Arcade opens on its menu (paused); the first prompt sets it playing.
-echo paused >"$dir/state"
+echo paused >"$ARC_RDIR/state"
 
 width="$("$BUN" "${CLAUDE_PLUGIN_ROOT}/hooks/read-config.ts" paneWidth 2>/dev/null)"
-[ -z "$width" ] && width=52
-echo "$width" >"$dir/panewidth"
+case "$width" in '' | *[!0-9]*) width=52 ;; esac
+echo "$width" >"$ARC_RDIR/panewidth"
 
 game_pane="$(tmux split-window -h -d -l "$width" -P -F '#{pane_id}' \
-  "exec '$BUN' '${CLAUDE_PLUGIN_ROOT}/arcade/arcade.ts' || read -n1 -s" 2>/dev/null)"
+  "exec env CLAUDE_ARCADE_STATE='$ARC_RDIR/state' '$BUN' '${CLAUDE_PLUGIN_ROOT}/arcade/arcade.ts' || read -n1 -s" 2>/dev/null)"
 
-[ -n "$game_pane" ] && echo "$game_pane" >"$dir/pane"
+[ -n "$game_pane" ] && echo "$game_pane" >"$ARC_RDIR/pane"
 
 exit 0

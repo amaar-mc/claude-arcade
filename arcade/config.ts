@@ -52,7 +52,7 @@ export function normalize(raw: Record<string, unknown>): ArcadeConfig {
     paneWidth: int(raw.paneWidth, DEFAULT_CONFIG.paneWidth, 30, 200),
     autoFocus: bool(raw.autoFocus, DEFAULT_CONFIG.autoFocus),
     snake: {
-      tickMs: int(snake.tickMs, DEFAULT_CONFIG.snake.tickMs, 40, 1000),
+      tickMs: int(snake.tickMs, DEFAULT_CONFIG.snake.tickMs, 40, 400),
       wrap: bool(snake.wrap, DEFAULT_CONFIG.snake.wrap),
     },
     connectFour: {

@@ -22,5 +22,9 @@ session="claude-arcade-$$"
 tmux bind-key -n M-Left  select-pane -L >/dev/null 2>&1 || true
 tmux bind-key -n M-Right select-pane -R >/dev/null 2>&1 || true
 
-tmux new-session -d -s "$session" "claude $*"
+# Quote each passed arg so values with spaces survive the tmux command string.
+cmd="claude"
+for a in "$@"; do cmd="$cmd $(printf %q "$a")"; done
+
+tmux new-session -d -s "$session" "$cmd"
 exec tmux attach-session -t "$session"
