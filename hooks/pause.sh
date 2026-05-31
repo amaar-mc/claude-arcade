@@ -4,8 +4,7 @@
 set -u
 
 . "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"
-SID="$(read_sid)"
-set_rdir "$SID"
+set_rdir "${TMUX_PANE:-}"
 mkdir -p "$ARC_RDIR"
 echo paused >"$ARC_RDIR/state"
 

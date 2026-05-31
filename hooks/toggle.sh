@@ -16,7 +16,7 @@ awin="$(win_of "$active")"
 [ -z "$awin" ] && exit 0
 
 # Find the session whose Claude pane (or arcade pane) lives in this window.
-target=""; tcl=""; tpane=""; tsid=""
+target=""; tcl=""; tpane=""
 for d in "$ARC_DIR"/sessions/*/; do
   [ -d "$d" ] || continue
   cp="$(cat "$d/claude_pane" 2>/dev/null)"
@@ -24,7 +24,7 @@ for d in "$ARC_DIR"/sessions/*/; do
   cw="$(win_of "$cp")"
   aw="$(win_of "$ap")"
   if { [ -n "$cw" ] && [ "$cw" = "$awin" ]; } || { [ -n "$aw" ] && [ "$aw" = "$awin" ]; }; then
-    target="$d"; tcl="$cp"; tpane="$ap"; tsid="$(basename "$d")"; break
+    target="$d"; tcl="$cp"; tpane="$ap"; break
   fi
 done
 [ -z "$target" ] && exit 0
@@ -32,7 +32,7 @@ done
 # Arcade pane gone: recreate beside Claude if Claude is still here.
 if ! pane_alive "$tpane"; then
   if pane_alive "$tcl"; then
-    CLAUDE_PLUGIN_ROOT="$root" CLAUDE_ARCADE_SID="$tsid" ARC_CLAUDE_PANE="$tcl" bash "$root/hooks/ensure-pane.sh"
+    CLAUDE_PLUGIN_ROOT="$root" ARC_CLAUDE_PANE="$tcl" bash "$root/hooks/ensure-pane.sh"
   fi
   exit 0
 fi

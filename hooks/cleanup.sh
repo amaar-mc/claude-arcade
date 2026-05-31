@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# SessionEnd hook: tear down this Claude session's arcade pane (visible or
-# parked) and remove its runtime dir, leaving other sessions untouched.
+# SessionEnd hook: tear down this Claude pane's arcade (visible or parked) and
+# remove its runtime dir, leaving other panes' arcades untouched.
 set -u
 
 . "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"
-SID="$(read_sid)"
-set_rdir "$SID"
+set_rdir "${TMUX_PANE:-}"
 
 if [ -n "${TMUX:-}" ] && [ -f "$ARC_RDIR/pane" ]; then
   tmux kill-pane -t "$(cat "$ARC_RDIR/pane")" 2>/dev/null || true

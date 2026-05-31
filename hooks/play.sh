@@ -4,18 +4,16 @@
 set -u
 
 . "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"
-SID="$(read_sid)"
-set_rdir "$SID"
+set_rdir "${TMUX_PANE:-}"
 mkdir -p "$ARC_RDIR"
 
 ap=""
 if [ -n "${TMUX:-}" ]; then
   ap="$(cat "$ARC_RDIR/pane" 2>/dev/null)"
-  # Self-heal: if the arcade pane was closed/killed, respawn it for this session.
+  # Self-heal: if the arcade pane was closed/killed, respawn it for this pane.
   # (ensure-pane resets state to paused, so write "playing" AFTER it.)
   if ! pane_alive "$ap"; then
-    CLAUDE_ARCADE_SID="$SID" ARC_CLAUDE_PANE="${TMUX_PANE:-}" \
-      bash "${CLAUDE_PLUGIN_ROOT}/hooks/ensure-pane.sh" </dev/null
+    ARC_CLAUDE_PANE="${TMUX_PANE:-}" bash "${CLAUDE_PLUGIN_ROOT}/hooks/ensure-pane.sh" </dev/null
     ap="$(cat "$ARC_RDIR/pane" 2>/dev/null)"
   fi
 fi

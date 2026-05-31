@@ -1,6 +1,6 @@
 {
   "name": "claude-arcade",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a tmux side-pane while Claude Code works.",
   "type": "module",
   "private": false,

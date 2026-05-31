@@ -1,35 +1,30 @@
 #!/usr/bin/env bash
 # Shared helpers for the claude-arcade hooks.
 
-# ARC_DIR holds global config + the plugin root pointer. ARC_RDIR is a
-# per-Claude-session runtime dir (pane ids + play/pause state). Keying on
-# Claude's session id (not the tmux session) means two Claude instances in the
-# same tmux session each get their own pane and state.
+# ARC_DIR holds global config + the plugin root pointer. ARC_RDIR is a runtime
+# dir (pane id + play/pause state) keyed on the CLAUDE PANE. One Claude pane gets
+# exactly one arcade, reused across new chats / clears / resumes (which all keep
+# the same pane). Two separate Claude instances live in different panes, so they
+# still get their own arcades.
 
 arcade_base() { ARC_DIR="$HOME/.claude-arcade"; }
 
-sanitize_sid() { printf '%s' "${1:-}" | tr -cd 'a-zA-Z0-9' | cut -c1-32; }
+sanitize_key() { printf '%s' "${1:-}" | tr -cd 'a-zA-Z0-9' | cut -c1-32; }
 
+# set_rdir <claude-pane-id>
 set_rdir() {
   arcade_base
-  local s
-  s="$(sanitize_sid "${1:-}")"
-  [ -z "$s" ] && s="default"
-  ARC_SID_SAFE="$s"
-  ARC_RDIR="$ARC_DIR/sessions/$s"
+  local k
+  k="$(sanitize_key "${1:-}")"
+  [ -z "$k" ] && k="default"
+  ARC_RDIR="$ARC_DIR/sessions/$k"
 }
 
-# Echo the Claude session id (sanitized). Uses CLAUDE_ARCADE_SID if the caller
-# already knows it (the Alt-j recreate path); otherwise parses the hook JSON on
-# stdin. Reads stdin at most once.
-read_sid() {
-  if [ -n "${CLAUDE_ARCADE_SID:-}" ]; then
-    sanitize_sid "$CLAUDE_ARCADE_SID"
-    return
-  fi
-  local bun
-  bun="$(command -v bun 2>/dev/null || echo "$HOME/.bun/bin/bun")"
-  sanitize_sid "$("$bun" "${CLAUDE_PLUGIN_ROOT}/hooks/session-id.ts" 2>/dev/null)"
+# The Claude pane: explicit (recreate) > our own pane env > active pane.
+claude_pane_id() {
+  if [ -n "${ARC_CLAUDE_PANE:-}" ]; then printf '%s' "$ARC_CLAUDE_PANE"; return; fi
+  if [ -n "${TMUX_PANE:-}" ]; then printf '%s' "$TMUX_PANE"; return; fi
+  tmux display-message -p '#{pane_id}' 2>/dev/null
 }
 
 pane_alive() { [ -n "${1:-}" ] && tmux list-panes -a -F '#{pane_id}' 2>/dev/null | grep -qx "$1"; }

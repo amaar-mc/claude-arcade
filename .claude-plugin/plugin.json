@@ -1,6 +1,6 @@
 {
   "name": "claude-arcade",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A retro arcade in a tmux side-pane. Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess while Claude Code works. Games run while Claude thinks and pause when it's done.",
   "author": { "name": "Amaar Chughtai" },
   "homepage": "https://github.com/amaar-mc/claude-arcade",
