@@ -52,7 +52,7 @@ on chromeControl(theBrowser, theAction, theURL, pauseJS, playJS)
 				end try
 			end tell
 		end using terms from
-		if u contains "instagram.com" then return "yes"
+		if u contains "instagram.com/reel" then return "yes"
 		return "no"
 	end if
 
@@ -69,7 +69,7 @@ on chromeControl(theBrowser, theAction, theURL, pauseJS, playJS)
 			set hasIG to false
 			repeat with w in windows
 				repeat with t in tabs of w
-					if (URL of t) contains "instagram.com" then set hasIG to true
+					if (URL of t) contains "instagram.com/reel" then set hasIG to true
 				end repeat
 			end repeat
 			if not hasIG then
@@ -81,7 +81,7 @@ on chromeControl(theBrowser, theAction, theURL, pauseJS, playJS)
 			repeat with w in windows
 				repeat with t in tabs of w
 					try
-						if (URL of t) contains "instagram.com" then execute javascript pauseJS in t
+						if (URL of t) contains "instagram.com/reel" then execute t javascript pauseJS
 					end try
 				end repeat
 			end repeat
@@ -94,14 +94,14 @@ on chromeControl(theBrowser, theAction, theURL, pauseJS, playJS)
 				set ti to 0
 				repeat with t in tabs of w
 					set ti to ti + 1
-					if (URL of t) contains "instagram.com" then
+					if (URL of t) contains "instagram.com/reel" then
 						try
 							set active tab index of w to ti
 							set index of w to 1
 						end try
 						if theAction is "play" then
 							try
-								execute javascript playJS in t
+								execute t javascript playJS
 							end try
 						end if
 						set didIt to "ok"
@@ -115,7 +115,7 @@ on chromeControl(theBrowser, theAction, theURL, pauseJS, playJS)
 			set checkJS to "1+1"
 			try
 				set ft to active tab of front window
-				set r to execute javascript checkJS in ft
+				set r to execute ft javascript checkJS
 				return "js-ok"
 			on error errMsg
 				return "js-blocked"
@@ -139,7 +139,7 @@ on safariControl(theAction, theURL, pauseJS, playJS)
 				return "no"
 			end try
 		end tell
-		if u contains "instagram.com" then return "yes"
+		if u contains "instagram.com/reel" then return "yes"
 		return "no"
 	end if
 
@@ -152,7 +152,7 @@ on safariControl(theAction, theURL, pauseJS, playJS)
 			set hasIG to false
 			repeat with w in windows
 				repeat with t in tabs of w
-					if (URL of t) contains "instagram.com" then set hasIG to true
+					if (URL of t) contains "instagram.com/reel" then set hasIG to true
 				end repeat
 			end repeat
 			if not hasIG then
@@ -164,7 +164,7 @@ on safariControl(theAction, theURL, pauseJS, playJS)
 			repeat with w in windows
 				repeat with t in tabs of w
 					try
-						if (URL of t) contains "instagram.com" then do JavaScript pauseJS in t
+						if (URL of t) contains "instagram.com/reel" then do JavaScript pauseJS in t
 					end try
 				end repeat
 			end repeat
@@ -174,7 +174,7 @@ on safariControl(theAction, theURL, pauseJS, playJS)
 			set didIt to "noig"
 			repeat with w in windows
 				repeat with t in tabs of w
-					if (URL of t) contains "instagram.com" then
+					if (URL of t) contains "instagram.com/reel" then
 						try
 							set current tab of w to t
 							set index of w to 1
