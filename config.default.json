@@ -4,5 +4,11 @@
   "autoFocus": true,
   "snake": { "tickMs": 120, "wrap": false },
   "connectFour": { "aiDepth": 5 },
-  "chess": { "aiDepth": 2 }
+  "chess": { "aiDepth": 2 },
+  "reels": {
+    "browser": "chrome",
+    "url": "https://www.instagram.com/reels/",
+    "lock": "soft",
+    "pollMs": 1200
+  }
 }
