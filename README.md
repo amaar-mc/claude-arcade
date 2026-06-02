@@ -1,10 +1,11 @@
+[README.md](https://github.com/user-attachments/files/28529342/README.md)
 <div align="center">
 
 # 🕹 Claude Arcade
 
 ### Claude Code is working. So are your thumbs.
 
-Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a pane right next to Claude Code. The game runs while Claude thinks and pauses the moment it's done.
+Play Snake, 2048, Tic-Tac-Toe, Connect Four, Chess, and more in a pane right next to Claude Code. The game runs while Claude thinks and pauses the moment it's done.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-22c55e.svg)](LICENSE)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-8b5cf6.svg)](https://docs.claude.com/en/docs/claude-code)
@@ -25,6 +26,7 @@ Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a pane right next to C
 | ⭕ Tic-Tac-Toe | a minimax engine that never loses | arrows + `enter`, or `1`-`9` |
 | 🔴 Connect Four | an alpha-beta engine | `←` `→` + `enter`, or `1`-`7` |
 | ♟ Chess | a real engine on [chess.js](https://github.com/jhlywa/chess.js) rules | arrows + `enter` |
+| 🧱 Tetris | your own stacking pieces | `←→` move · `↑`/`z` rotate · `↓` soft · `space` hard |
 
 ## Quick start
 
