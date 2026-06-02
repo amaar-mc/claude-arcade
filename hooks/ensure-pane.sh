@@ -9,6 +9,9 @@ set -u
 arcade_base
 mkdir -p "$ARC_DIR"
 
+# Reels mode replaces the tmux pane with browser-based Instagram Reels; stand down.
+[ -f "$ARC_DIR/reels-on" ] && exit 0
+
 # Seed config on first run (global, shared across panes).
 if [ ! -f "$ARC_DIR/config.json" ] && [ -f "${CLAUDE_PLUGIN_ROOT}/config.default.json" ]; then
   cp "${CLAUDE_PLUGIN_ROOT}/config.default.json" "$ARC_DIR/config.json"

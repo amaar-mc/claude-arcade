@@ -4,6 +4,8 @@
 set -u
 
 . "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"
+# Reels mode owns play/pause + focus when enabled; let its hook handle it.
+[ -f "$HOME/.claude-arcade/reels-on" ] && exit 0
 set_rdir "${TMUX_PANE:-}"
 mkdir -p "$ARC_RDIR"
 echo paused >"$ARC_RDIR/state"
