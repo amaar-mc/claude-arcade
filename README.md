@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/28529342/README.md)
 <div align="center">
 
 # 🕹 Claude Arcade
