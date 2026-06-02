@@ -4,7 +4,7 @@
 
 ### Claude Code is working. So are your thumbs.
 
-Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a pane right next to Claude Code. The game runs while Claude thinks and pauses the moment it's done.
+Play Snake, 2048, Tic-Tac-Toe, Connect Four, Chess, and more in a pane right next to Claude Code. The game runs while Claude thinks and pauses the moment it's done.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-22c55e.svg)](LICENSE)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-8b5cf6.svg)](https://docs.claude.com/en/docs/claude-code)
@@ -25,6 +25,7 @@ Play Snake, 2048, Tic-Tac-Toe, Connect Four, and Chess in a pane right next to C
 | ⭕ Tic-Tac-Toe | a minimax engine that never loses | arrows + `enter`, or `1`-`9` |
 | 🔴 Connect Four | an alpha-beta engine | `←` `→` + `enter`, or `1`-`7` |
 | ♟ Chess | a real engine on [chess.js](https://github.com/jhlywa/chess.js) rules | arrows + `enter` |
+| 🧱 Tetris | your own stacking pieces | `←→` move · `↑`/`z` rotate · `↓` soft · `space` hard |
 
 ## Quick start
 
@@ -124,7 +125,7 @@ Claude Code owns the whole terminal, so the arcade rides in a tmux split beside 
 
 ## Add your own game
 
-A game is one file. Write the rules as plain functions, return a `GameModule`, register it. Every game follows the same small contract in `arcade/types.ts`, and Tic-Tac-Toe is the easiest one to copy. Minesweeper, Tetris, and Wordle are all wide open. See [CONTRIBUTING.md](CONTRIBUTING.md).
+A game is one file. Write the rules as plain functions, return a `GameModule`, register it. Every game follows the same small contract in `arcade/types.ts`, and Tic-Tac-Toe is the easiest one to copy. Minesweeper and Wordle are all wide open. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```sh
 bun test               # game logic and renderer tests

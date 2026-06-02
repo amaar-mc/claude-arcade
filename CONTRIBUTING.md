@@ -38,7 +38,7 @@ bun arcade/arcade.ts   # play it locally (any terminal, no tmux needed)
 
 ## Ideas wanted
 
-Minesweeper, Tetris, Wordle, Solitaire, 2048-style variants, a harder chess
+Minesweeper, Wordle, Solitaire, 2048-style variants, a harder chess
 eval. Open a PR - small and focused beats big and sprawling.
 
 ## Recording the demo GIF (maintainers)
