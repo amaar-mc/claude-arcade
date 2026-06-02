@@ -25,8 +25,9 @@ import { module as tictactoe } from "./games/tictactoe.ts";
 import { module as connectfour } from "./games/connectfour.ts";
 import { module as twenty48 } from "./games/twenty48.ts";
 import { module as chess } from "./games/chess.ts";
+import { module as tetris } from "./games/tetris.ts";
 
-const GAMES: readonly GameModule[] = [snake, tictactoe, connectfour, twenty48, chess];
+const GAMES: readonly GameModule[] = [snake, tictactoe, connectfour, twenty48, chess, tetris];
 const FRAME_MS = 60;
 
 type Screen = "menu" | "play" | "settings";
@@ -256,7 +257,9 @@ function main(): void {
       const mod = GAMES[current];
       if (mod.realtime && isClaudeWorking() && !running.isOver()) {
         const now = Date.now();
-        if (now - lastTick >= config.snake.tickMs) {
+        // Snake's speed is a user setting; other realtime games use their own.
+        const tickMs = mod.id === "snake" ? config.snake.tickMs : mod.tickMs;
+        if (now - lastTick >= tickMs) {
           running.tick();
           lastTick = now;
         }
@@ -288,7 +291,28 @@ function main(): void {
   if (process.stdin.isTTY) process.stdin.setRawMode(true);
   process.stdin.resume();
   process.stdin.setEncoding("utf8");
-  process.stdin.on("data", (chunk: string) => onData(chunk));
+  // Held-key repeats arrive bundled ("\x1b[D\x1b[D\x1b[D"). Split them so each
+  // keystroke gets dispatched; otherwise the tail of the chunk is dropped.
+  function splitKeys(chunk: string): string[] {
+    const keys: string[] = [];
+    let i = 0;
+    while (i < chunk.length) {
+      if (chunk[i] === "\x1b" && chunk[i + 1] === "[") {
+        // CSI: ESC [ <0x30-0x3F>* <final>
+        let j = i + 2;
+        while (j < chunk.length && chunk.charCodeAt(j) >= 0x30 && chunk.charCodeAt(j) <= 0x3f) j++;
+        keys.push(chunk.slice(i, j + 1));
+        i = j + 1;
+      } else {
+        keys.push(chunk[i++]);
+      }
+    }
+    return keys;
+  }
+  process.stdin.on("data", (chunk: string) => {
+    for (const k of splitKeys(chunk)) onData(k);
+    frame(); // repaint now so movement doesn't wait on the next interval
+  });
   process.on("SIGINT", cleanup);
   process.on("SIGTERM", cleanup);
 
